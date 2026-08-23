@@ -12,3 +12,8 @@ dependencies = [
     "pymupdf>=1.28.2",
     "pypdf>=6.16.1",
 ]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.3.0",
+]
