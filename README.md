@@ -27,6 +27,7 @@ The main workflow is implemented in `notebook/pdf_loader.ipynb`. It combines sem
 │   ├── document.ipynb        # Document-processing experiments
 │   └── pdf_loader.ipynb      # PDF loading, indexing, and retrieval pipeline
 ├── src/                      # Package namespace for reusable code
+├── app.py                    # FAISS and Groq RAG application entry point
 ├── main.py                   # Placeholder CLI entry point
 ├── pyproject.toml            # Project metadata and uv dependencies
 └── requirements.txt          # pip-compatible dependency list
@@ -45,7 +46,10 @@ The main workflow is implemented in `notebook/pdf_loader.ipynb`. It combines sem
 
 ```powershell
 uv sync
+uv run python app.py
 ```
+
+The application automatically builds `faiss_store/` from documents in `data/` when the index does not exist. On later runs, it loads the persisted FAISS index and metadata.
 
 To register the project environment as a Jupyter kernel:
 
@@ -60,7 +64,10 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
+python app.py
 ```
+
+When using `pip`, run the command from the activated virtual environment. On Windows, verify that `python` resolves to `.venv\Scripts\python.exe`; otherwise use `uv run python app.py` from the project root.
 
 ## Configuration
 
@@ -144,7 +151,8 @@ PDFs and generated vector-store files may contain sensitive or copyrighted mater
 
 - `pyproject.toml` is the source of truth for the `uv` environment.
 - `requirements.txt` is provided for a conventional `pip` workflow.
-- `main.py` currently prints a setup message; the notebook is the active pipeline entry point.
+- `app.py` is the script entry point for the FAISS and Groq pipeline; `main.py` currently prints a setup message.
+- The notebook remains available for step-by-step ingestion and retrieval experiments.
 - The embedding model is downloaded by `sentence-transformers` on first use and may require internet access.
 - Groq model availability can change. Set `GROQ_MODEL` to another model listed in your Groq account when needed.
 
@@ -158,6 +166,3 @@ If Groq returns a `404` or `model_not_found` error, the configured model is unav
 
 Set `GROQ_API_KEY` in `.env` or in the environment used by the notebook kernel, then restart the kernel and rerun the configuration cells.
 
-## License
-
-No license has been specified for this project yet.
