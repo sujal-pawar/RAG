@@ -7,3 +7,5 @@ sentence-transformers
 # OpenSource vector store
 faiss-cpu
 chromadb
+langchain-groq
+python-dotenv
